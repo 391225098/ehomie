@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lenovo.ec3.dao.login.LoginDao">
+
+    <sql id="table_name"> t_admin_user </sql>
+    <sql id="from_table_name"> from <include refid="table_name"/> </sql>
+    <sql id="insert_table_name"> insert into <include refid="table_name"/> </sql>
+    <sql id="update_table_name"> update <include refid="table_name"/> </sql>
+    <sql id="delete_table_name"> delete  <include refid="from_table_name"/> </sql>
+    <sql id="countSql">select count(1) from  <include refid="table_name"/> </sql>
+
+    <sql id="selectSql">
+        select id, username, realname, password, status, updater, updatetime <include refid="from_table_name"/>
+    </sql>
+
+
+    <select id="findAdminUser" parameterType="adminUser" resultType="adminUser">
+        <include refid="selectSql" /> where username = #{username}
+    </select>
+
+    <select id="findAdminUserCount" parameterType="adminUser" resultType="int">
+        select count(1) <include refid="from_table_name" /> where username = #{username}
+    </select>
+
+    <sql id="whereSql">
+        <trim prefix="where">
+            <!--<isNotEmpty property="username" prepend="and">-->
+                <!--(username like '%$username$%' or realname  like '%$username$%' )-->
+            <!--</isNotEmpty>-->
+
+            <!--<isGreaterThan property="status" compareValue="0" prepend="and">-->
+                <!--status =  #status#-->
+            <!--</isGreaterThan>-->
+        </trim>
+    </sql>
+    <sql id="orderbySql">
+        order by updatetime desc
+    </sql>
+    <sql id="limitSql">
+        <if test="numPerPage != null">
+            limit #{startIndex} , #{numPerPage}
+        </if>
+    </sql>
+
+
+    <select id="findLoginPageList"  parameterType="adminUser" resultType="adminUser">
+        <include refid="selectSql"/>
+        <include refid="whereSql" />
+        <include refid="orderbySql" />
+        <include refid="limitSql" />
+    </select>
+
+    <select id="findLoginPageListCount" parameterType="adminUser" resultType="int">
+        select count(1) <include refid="from_table_name"/>
+        <include refid="whereSql" />
+    </select>
+
+    <insert id="insertAdminUser" parameterType="adminUser">
+    </insert>
+
+    <update id="updateAdminUser" parameterType="adminUser">
+
+    </update>
+
+    <update id="batchUpdateLoginStatus" parameterType="adminUser">
+    </update>
+
+
+</mapper>

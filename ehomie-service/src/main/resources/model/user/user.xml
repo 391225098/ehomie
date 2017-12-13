@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lenovo.ec3.dao.user.UserDao">
+
+    <sql id="table_name"> t_user </sql>
+    <sql id="from_table_name">from
+        <include refid="table_name"/>
+    </sql>
+    <sql id="insert_table_name">insert into
+        <include refid="table_name"/>
+    </sql>
+    <sql id="update_table_name">update
+        <include refid="table_name"/>
+    </sql>
+    <sql id="delete_table_name">delete
+        <include refid="from_table_name"/>
+    </sql>
+    <sql id="countSql">select count(1) from
+        <include refid="table_name"/>
+    </sql>
+
+    <sql id="selectSql">
+        select id,user_code,user_id,user_name,passwd,tmp_code
+        <include refid="from_table_name"/>
+    </sql>
+
+    <select id="findUserByUserCode" parameterType="String" resultType="User">
+        <include refid="selectSql"/>
+        where user_code = #{value}
+    </select>
+
+    <select id="findUserByUserId" parameterType="String" resultType="User">
+        <include refid="selectSql"/>
+        where user_id = #{userId}
+    </select>
+
+
+</mapper>

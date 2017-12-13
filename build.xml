@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="GBK"?>
+<project name="ehomie" default="default" >
+    <import file="buildConfig.xml" />
+
+    <tstamp prefix="build">
+        <format property="time" pattern="yyyy-MM-dd.HH.mm.ss"/>
+        <format property="date" pattern="yyyyMMddHHmmss"/>
+    </tstamp>
+
+    <tstamp>
+        <format property="TODAY_UK" pattern="yyyyMMdd_HHmmsssss"  locale="cn,CN"/>
+    </tstamp>
+
+    <!-- deploy dir -->
+    <property name="admin.deploy.dir" value="/app/deploy/ehomie/house" />
+
+    <!-- war -->
+    <property name="admin-war" value="${basedir}/ehomie-house/target/ehomie-house-1.0-SNAPSHOT.war" />
+
+    <target name="prepare-admin">
+        <exec executable="/bin/bash" >
+            <arg line="-c 'rm -rf ${admin.deploy.dir}'" />
+        </exec>
+        <mkdir dir="${admin.deploy.dir}"/>
+    </target>
+
+    <target name="war-admin-trunk" >
+        <echo>War this project ..</echo>
+        <exec executable="mvn" >
+            <arg value="clean"/>
+            <arg value="package"/>
+            <arg value="-Dmaven.test.skip=true"/>
+            <arg value="-am"/>
+            <arg value="-pl"/>
+            <arg value="ehomie-house"/>
+        </exec>
+        <echo>War Success : ${war.dir}</echo>
+    </target>
+
+    <target name="war-admin-beta" >
+        <echo>War this project ..</echo>
+        <exec executable="mvn" >
+            <arg value="clean"/>
+            <arg value="package"/>
+            <arg value="-Pbeta"/>
+            <arg value="-Dmaven.test.skip=true"/>
+            <arg value="-am"/>
+            <arg value="-pl"/>
+            <arg value="ehomie-house"/>
+        </exec>
+        <echo>War Success : ${war.dir}</echo>
+    </target>
+
+    <target name="war-admin-preproduct" >
+        <echo>War this project ..</echo>
+        <exec executable="mvn" >
+            <arg value="clean"/>
+            <arg value="package"/>
+            <arg value="-Ppreproduct"/>
+            <arg value="-Dmaven.test.skip=true"/>
+            <arg value="-am"/>
+            <arg value="-pl"/>
+            <arg value="ehomie-house"/>
+        </exec>
+        <echo>War Success : ${war.dir}</echo>
+    </target>
+
+    <target name="war-admin-product" >
+        <echo>War this project ..</echo>
+        <exec executable="mvn" >
+            <arg value="clean"/>
+            <arg value="package"/>
+            <arg value="-Pproduct"/>
+            <arg value="-Dmaven.test.skip=true"/>
+            <arg value="-am"/>
+            <arg value="-pl"/>
+            <arg value="ehomie-house"/>
+        </exec>
+        <echo>War Success : ${war.dir}</echo>
+    </target>
+
+    <!-- ##################################deploy######################################-->
+
+    <target name="deploy-admin-trunk" depends="prepare-admin, war-admin-trunk">
+        <echo>Begin deploy...</echo>
+        <exec executable="jar" dir="${admin.deploy.dir}">
+            <arg value="-xfM"/>
+            <arg value="${admin-war}" />
+        </exec>
+        <echo>deploy complete at ${build.time}.</echo>
+        <echo>now you can start the admin tomcat.</echo>
+    </target>
+
+    <target name="deploy-admin-beta" depends="prepare-admin, war-admin-beta">
+        <echo>Begin deploy...</echo>
+        <exec executable="jar" dir="${admin.deploy.dir}">
+            <arg value="-xfM"/>
+            <arg value="${admin-war}" />
+        </exec>
+        <echo>deploy complete at ${build.time}.</echo>
+        <echo>now you can start the admin tomcat.</echo>
+    </target>
+
+    <target name="deploy-admin-preproduct" depends="prepare-admin, war-admin-preproduct">
+        <echo>Begin deploy...</echo>
+        <exec executable="jar" dir="${admin.deploy.dir}">
+            <arg value="-xfM"/>
+            <arg value="${admin-war}" />
+        </exec>
+        <echo>deploy complete at ${build.time}.</echo>
+        <echo>now you can start the admin tomcat.</echo>
+    </target>
+
+    <target name="deploy-admin-product" depends="prepare-admin, war-admin-product">
+        <echo>Begin deploy...</echo>
+        <exec executable="jar" dir="${admin.deploy.dir}">
+            <arg value="-xfM"/>
+            <arg value="${admin-war}" />
+        </exec>
+        <echo>deploy complete at ${build.time}.</echo>
+        <echo>now you can start the admin tomcat.</echo>
+    </target>
+
+    <target name="default">
+        <echo>ant deploy-admin-trunk</echo>
+        <echo>ant deploy-admin-beta</echo>
+        <echo>ant deploy-admin-product</echo>
+        <echo>ant deploy-admin-preproduct</echo>
+    </target>
+</project>
